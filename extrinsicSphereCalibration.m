@@ -1,4 +1,4 @@
-function [ returnVal ] = extrinsicSphereCalibration(K,sphere)
+function [ returnVal ] = extrinsicSphereCalibration(K,sphere,worldRadius)
 %EXTRINSICSPHERECALIBRATION Calculates extrinsic paramteres using a sphere
 %   Detailed explanation goes here
 
@@ -7,14 +7,12 @@ function [ returnVal ] = extrinsicSphereCalibration(K,sphere)
     % Look at section 4.2 of "Extrinsic Calibration of Camera Networks Using
     % a Sphere" for a summary of the maths implemented
     
-    % ATM assumed Rs = radius of the sphere in pixels (paper has some discussion about sphere vs circle)
-    
     u0 = K(1,3);
     v0 = K(2,3);
     us = sphere(1,1);
     vs = sphere(1,2);
     
-    Rs=sphere(1,3);
+    Rs=worldRadius;
     
     fx = K(1,1);
     fy = K(2,2);
@@ -23,13 +21,13 @@ function [ returnVal ] = extrinsicSphereCalibration(K,sphere)
     
     xs = (us-u0)/fx;
     ys = (vs-v0)/fy;
-    delta = -((xs^2+ys^2)^1/2);
+    delta = -sqrt(xs^2+ys^2);
     theta = -atan(delta);
     A = N/(fx*fy);
 
-    Zs = Rs*(pi/(A*cos(theta)))^1/2;
+    Zs = Rs*sqrt(pi/(A*cos(theta)));
     Xs = xs * Zs;
     Ys = ys * Zs;
-    returnVal= [Xs Ys Zs]
+    returnVal = [Xs Ys Zs];
 end
 

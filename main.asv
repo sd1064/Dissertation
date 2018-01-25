@@ -1,29 +1,30 @@
-%Setup
-%Calibrate Camera
-%Read in image 
-%Undistort image
-%Get Centre point and radius of circle
-% Can assume [R T] = [0 0]
+% Setup
+% Calibrate Camera
+% Read in image 
+% Undistort image
+% Get Centre point and radius of circle
+% Make call to calculate extrinsic
+% Displays the camera and sphere
+
 
 clc;
 clear;
 
-originalImage = imread('mockedUp.jpg');
+originalImage = imread('test.jpg');
 cameraParams = calibrateCamera(9);
 [undistortedImage, newOrigin] = undistortImage(originalImage, cameraParams, 'OutputView', 'full');
 [centres,radii] = circleRecognition(undistortedImage);
 
-sphereOne = [centres(1,1) centres(1,2)];
-sphereTwo = [centres(2,1) centres(2,2)];
+sphereOne = [centres(1,1) centres(1,2) radii(1,1)];
+sphereTwo = [centres(2,1) centres(2,2) radii(2,1)];
 
-% 2. Get Us and Vs off the centre off the sphere - DONE
-%    xs = (us-0)/fx
-%    ys = (vs -v0)/fy
-%    -delta = (x^2+y^2)^1/2
-%    theta = -arctan(delta)
-% 3. A = N(sxsy) = N/(fxfy) [NOTE : N = number of pixels in the circle]
-%    A= pi*lambvdax *lambday = pi*(weird letter that looks like E)^2/cos(theta)
-%    Zs=Rs*(weird letter that looks like E) = 
-% 4. Xs = xsZs
-%    Ys = ysZs
+outputOne = extrinsicSphereCalibration(cameraParams.IntrinsicMatrix,sphereOne,8);
+outputTwo = extrinsicSphereCalibration(cameraParams.IntrinsicMatrix,sphereTwo,8);
+
+displayCamera;
+
+%
+
+
+
 
