@@ -1,11 +1,11 @@
-function [ cameraParams ] = calibrateCamera( numberImages )
+function [ cameraParams ] = calibrateCamera( numberImages,squareSize)
 %CALIBRATECAMERA Summary of this function goes here
 
 %   Detailed explanation goes here
     numImages = numberImages;
     imageFileNames = cell(1, numImages);
     for i = 1:numImages
-        imageFileNames{i} = fullfile(pwd,'res','images','calibration',sprintf('image%d.jpg', i));
+        imageFileNames{i} = fullfile(pwd,'res','images','calibration','test',sprintf('test (%d).jpg', i));
     end
 
     % Detect checkerboards in images
@@ -17,7 +17,7 @@ function [ cameraParams ] = calibrateCamera( numberImages )
     [mrows, ncols, ~] = size(originalImage);
 
     % Generate world coordinates of the corners of the squares
-    squareSize = 30;  % in units of 'mm'
+    %squareSize = 30;  % in units of 'mm'
     worldPoints = generateCheckerboardPoints(boardSize, squareSize);
 
     % Calibrate the camera
@@ -31,7 +31,7 @@ function [ cameraParams ] = calibrateCamera( numberImages )
     %h1=figure; showReprojectionErrors(cameraParams);
 
     % Visualize pattern locations
-    %h2=figure; showExtrinsics(cameraParams, 'CameraCentric');
+    h2=figure; showExtrinsics(cameraParams, 'CameraCentric');
 
     % Display parameter estimation errors
     %displayErrors(estimationErrors, cameraParams);
