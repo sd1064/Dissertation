@@ -7,8 +7,8 @@ verts = shape.';
 % Convert from micro meters to milli
 verts = verts .* (1e-03);
 % Translate
-verts(:,1)= verts(:,1)+500; 
-verts(:,3)= verts(:,3)+500; 
+verts(:,1)= verts(:,1)+300; 
+verts(:,3)= verts(:,3)+100; 
 
 sphereReflections = zeros(size(verts));
 for i=1:length(verts)  
