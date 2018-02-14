@@ -1,5 +1,3 @@
-sphereRadius = 53;
-
 originalImage = imread('testSphere.jpg');
 cameraParams = calibrateCamera(25,23);
 
@@ -13,5 +11,6 @@ spherePosition = extrinsicSphereCalibration(cameraParams.IntrinsicMatrix,sphereO
 %outputTwo = extrinsicSphereCalibration(cameraParams.IntrinsicMatrix,sphereTwo,8);
 
 focalLengthWorldUnits = calculateFocalLengthWorldUnits(sphereRadius,sphereOne(1,3),cameraParams.FocalLength(1));
-centreProjectionX = size(undistortedImage,1)/2;
-centreProjectionY = size(undistortedImage,2)/2;
+
+centreProjectionX = 0;
+centreProjectionY = 0;

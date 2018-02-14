@@ -29,16 +29,38 @@
 figure;hold on;
 xlabel('X');ylabel('Y');zlabel('Z');axis equal;grid on;
 
-cam = plotCamera('Location',[0 ; 0 ; 0 ],'Orientation',eye(3),'Size',100);
+cam = plotCamera('Location',[0 ; 0 ; 0 ],'Orientation',eye(3),'Size',40);
+
 % Plot Sphere
-r=53;
-[x,y,z]=ellipsoid(spherePosition(1,1),spherePosition(1,2),spherePosition(1,3),r,r,r,10);
-surf(x, y, z);
+pcshow([fvc.vertices(:,1),fvc.vertices(:,2),fvc.vertices(:,3)]);
+
 % Plot Starting Face
 pcshow([verts(:,1),verts(:,2),verts(:,3)]);
+
 % Plot ending Face
-zPos = repelem(focalLengthWorldUnits,size(projectedImage,1)).';
-pcshow([projectedImage(:,1),projectedImage(:,2),-zPos]);
+zPosFace = repelem(focalLengthWorldUnits,size(projectedImage,1)).';
+pcshow([projectedImage(:,1),projectedImage(:,2),-zPosFace]);
+
+% Plot sphere projection
+zPosSphere = repelem(focalLengthWorldUnits,size(projectedSphere,1)).';
+pcshow([projectedSphere(:,1),projectedSphere(:,2),-zPosSphere]);
+
+% Plot image plane
+ratio = sphereRadius/sphereOne(1,3);
+
+height = size(undistortedImage,1)/2 * ratio;
+width = size(undistortedImage,2)/2 * ratio;
+zPosImagePlane = repelem(focalLengthWorldUnits,4).';
+
+X = [-width width width -width];
+Y = [height height -height -height];
+
+patch('ZData',-zPosImagePlane,'YData',Y,...
+    'XData',X,...
+    'FaceAlpha',0.2,...
+    'LineWidth',1,...
+    'FaceColor',[0.494117647058824 0.184313725490196 0.556862745098039],...
+    'EdgeColor',[0.494117647058824 0.184313725490196 0.556862745098039]);
 
 hold off;figure;
-pcshow([projectedImage(:,1),projectedImage(:,2),-zPos]);
+pcshow([projectedImage(:,1),projectedImage(:,2),-zPosFace]);
