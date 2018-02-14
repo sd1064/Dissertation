@@ -15,9 +15,8 @@ sphereRadius = 53;
 
 calculateParams;
 pointsTo2D;
-displayCamera;
 costUtiliser;
-
+displayCamera;
 
 
 

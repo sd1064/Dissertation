@@ -14,6 +14,7 @@ function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadiu
     % Generate a face using offsets
     shape  = coef2object( offsets, model.shapeMU, model.shapePC, model.shapeEV );
     genFace = reshape(shape, [ 3 prod(size(shape))/3 ])'; 
+    genFace = genFace .* (1e-03);
     
     % apply rotation
     genFace=genFace * rotx(Rx) * roty(Ry) * rotz(Rz);
@@ -34,8 +35,8 @@ function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadiu
     projectedGen = [projectedGen repelem(focalLengthWorldUnits,size(projectedGen,1)).'];
     
     for i=1:length(outputVector)
-        outputVector(i,1) = norm(projectedGen(i,:) - projectedFace(i,:));
+        outputVector(i,1) = norm(projectedFace(i,:) - projectedGen(i,:));
     end
-    
+
 end
 

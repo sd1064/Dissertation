@@ -37,6 +37,9 @@ pcshow([fvc.vertices(:,1),fvc.vertices(:,2),fvc.vertices(:,3)]);
 % Plot Starting Face
 pcshow([verts(:,1),verts(:,2),verts(:,3)]);
 
+% Plot LSQ Face
+% pcshow([lsqFace(:,1) lsqFace(:,2) (lsqFace(:,3)+leastSquare(205))]);
+
 % Plot ending Face
 zPosFace = repelem(focalLengthWorldUnits,size(projectedImage,1)).';
 pcshow([projectedImage(:,1),projectedImage(:,2),-zPosFace]);
