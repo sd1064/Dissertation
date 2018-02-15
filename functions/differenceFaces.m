@@ -5,7 +5,7 @@ function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadiu
     % projectedFace is the known Face
     % AvgFace is the face that will be used to fit to the known face
     
-    outputVector = zeros(70,1);
+    outputVector = zeros(1,1);
     
     offsets = inputVector(1:199); 
     Rx = inputVector(200); Ry = inputVector(201); Rz = inputVector(202);
@@ -25,18 +25,24 @@ function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadiu
     genFace(:,3) = genFace(:,3) + Tz;
     
     landMarksGenned = getLandmarks(genFace,landmarkVertNum);
-    sphereReflections = zeros(size(genFace));
+    % Only use first landmark atm;
+    landMarksGenned = landMarksGenned(1,:);
+    sphereReflections = zeros(size(landMarksGenned));
     
-    for i=1:length(landMarksGenned)  
-        sphereReflections(i,:) = sphereReflection(sphereRadius,spherePosition,landMarksGenned(i,:));
-    end
+    %for i=1:length(landMarksGenned)  
+        %sphereReflections(i,:) = sphereReflection(sphereRadius,spherePosition,landMarksGenned(i,:));
+    %end
+    
+    sphereReflections(1,:) = sphereReflection(sphereRadius,spherePosition,landMarksGenned(1,:));
     
     projectedGen  = perspectiveProjection(sphereReflections,focalLengthWorldUnits,centreProjectionX,centreProjectionY);
     projectedGen = [projectedGen repelem(focalLengthWorldUnits,size(projectedGen,1)).'];
     
-    for i=1:length(outputVector)
-        outputVector(i,1) = norm(projectedFace(i,:) - projectedGen(i,:));
-    end
+    outputVector(1,1) = norm(projectedFace(1,:) - projectedGen(1,:));
+    
+    %for i=1:length(outputVector)
+    %    outputVector(i,1) = norm(projectedFace(i,:) - projectedGen(i,:));
+    %end
 
 end
 
