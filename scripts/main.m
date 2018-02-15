@@ -13,11 +13,11 @@ model = load('01_MorphableModel.mat');
 load('face.mat','shape');
 sphereRadius = 53;
 
-calculateParams;
-pointsTo2D;
-costUtiliser;
-displayCamera;
-
+% calculateParams;
+% pointsTo2D;
+% costUtiliser;
+% displayCamera;
+% sphereUndistort;
 
 
 

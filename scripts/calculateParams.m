@@ -2,7 +2,7 @@ originalImage = imread('testSphere.jpg');
 cameraParams = calibrateCamera(25,23);
 
 [undistortedImage, newOrigin] = undistortImage(originalImage, cameraParams, 'OutputView', 'full');
-[centres,radii] = circleRecognition(undistortedImage,330,390);
+[centres,radii] = circleRecognition(originalImage,330,390);
 
 sphereOne = [centres(1,1) centres(1,2) radii(1,1)];
 spherePosition = extrinsicSphereCalibration(cameraParams.IntrinsicMatrix,sphereOne,sphereRadius);
