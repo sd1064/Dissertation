@@ -1,6 +1,6 @@
 function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadius, ...
                           focalLengthWorldUnits,centreProjectionX,centreProjectionY, ...
-                          model,landmarkVertNum,projectedFace)
+                          model,landmarkVertNum,projectedFace,numOfParams)
 
     % projectedFace is the known Face
     % AvgFace is the face that will be used to fit to the known face
@@ -10,11 +10,12 @@ function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadiu
     shapeEv = double(model.shapeEV);
     
     outputVector = zeros(1,1);
+   
+    offsets = inputVector(1:numOfParams); 
     
-    offsets = inputVector(1:199); 
-    Rx = inputVector(200); Ry = inputVector(201); Rz = inputVector(202);
-    Tx = inputVector(203); Ty = inputVector(204); Tz = inputVector(205);
-       
+    Rx = inputVector(numOfParams+1); Ry = inputVector(numOfParams+2); Rz = inputVector(numOfParams+3);
+    Tx = inputVector(numOfParams+4); Ty = inputVector(numOfParams+5); Tz = inputVector(numOfParams+6);
+
     % Generate a face using offsets
     shape  = coef2object( offsets, shapeMu, shapePc, shapeEv );
     genFace = reshape(shape, [ 3 prod(size(shape))/3 ])'; 
@@ -29,24 +30,21 @@ function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadiu
     genFace(:,3) = genFace(:,3) + Tz;
     
     landMarksGenned = getLandmarks(genFace,landmarkVertNum);
-    % Only use first landmark atm;
-    landMarksGenned = landMarksGenned(1,:);
+    landMarksGenned = landMarksGenned(1:size(projectedFace,1),:);
     sphereReflections = zeros(size(landMarksGenned));
     
-    %for i=1:length(landMarksGenned)  
-        %sphereReflections(i,:) = sphereReflection(sphereRadius,spherePosition,landMarksGenned(i,:));
-    %end
-    
-    sphereReflections(1,:) = sphereReflection(sphereRadius,spherePosition,landMarksGenned(1,:));
-    
+    for i=1:length(landMarksGenned)  
+        sphereReflections(i,:) = sphereReflection(sphereRadius,spherePosition,landMarksGenned(i,:));
+    end
+
     projectedGen  = perspectiveProjection(sphereReflections,focalLengthWorldUnits,centreProjectionX,centreProjectionY);
     projectedGen = [projectedGen repelem(focalLengthWorldUnits,size(projectedGen,1)).'];
-    
-    outputVector(1,1) = norm(projectedFace(1,:) - projectedGen(1,:));
-    
-    %for i=1:length(outputVector)
-    %    outputVector(i,1) = norm(projectedFace(i,:) - projectedGen(i,:));
-    %end
 
+    for i=1:length(outputVector)
+        outputVector(i,1) = norm(projectedFace(i,:) - projectedGen(i,:));
+    end
+    
+    offsetSD = offsets ./ shapeEv(1:numOfParams,:);
+    outputVector = [outputVector ; offsetSD];
 end
 
