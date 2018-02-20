@@ -3,9 +3,8 @@ sizePC = size(model.shapePC, 2);
 
 landmarksAverage = landmarks(:,2:end);
 offsets = repelem(0,199).';
-% offsets = randn(199, 1);
 
-Rx = 0; Ry = 0; Rz = 0; Tx = 0; Ty = 0; Tz = 500;
+Rx = 0; Ry = 0; Rz = 0; Tx = 0; Ty = 0; Tz = 498;
 
 zPos = repelem(focalLengthWorldUnits,size(projectedImage,1)).';
 landmarkVertNum  = landmarks(:,1) +1;
@@ -21,7 +20,9 @@ func = @(params)differenceFaces(params,spherePosition,sphereRadius, ...
         focalLengthWorldUnits,centreProjectionX,centreProjectionY, ...
         model,landmarkVertNum,landmarksProjectedImage);
 
-ret = lsqnonlin(func,params);
+options = optimoptions('lsqnonlin','Display','iter');
+    
+[ret,resnorm,residual,exitflag,output] = lsqnonlin(func,params,[],[],options);
 
 %%% BELOW IS ALL CODE TO DISPLAY
 
@@ -37,7 +38,6 @@ lsqFace = lsqFace * rotx(ret(200)) * roty(ret(201)) * rotz(ret(202));
 lsqFace(:,1)= lsqFace(:,1)+ret(203);
 lsqFace(:,2)= lsqFace(:,2)+ret(204);
 lsqFace(:,3)= lsqFace(:,3)+ret(205); 
-
 
 figure;hold on;
 xlabel('X');ylabel('Y');zlabel('Z');axis equal;grid on;

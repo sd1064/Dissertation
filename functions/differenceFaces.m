@@ -5,6 +5,10 @@ function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadiu
     % projectedFace is the known Face
     % AvgFace is the face that will be used to fit to the known face
     
+    shapeMu = double(model.shapeMU);
+    shapePc = double(model.shapePC);
+    shapeEv = double(model.shapeEV);
+    
     outputVector = zeros(1,1);
     
     offsets = inputVector(1:199); 
@@ -12,7 +16,7 @@ function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadiu
     Tx = inputVector(203); Ty = inputVector(204); Tz = inputVector(205);
        
     % Generate a face using offsets
-    shape  = coef2object( offsets, model.shapeMU, model.shapePC, model.shapeEV );
+    shape  = coef2object( offsets, shapeMu, shapePc, shapeEv );
     genFace = reshape(shape, [ 3 prod(size(shape))/3 ])'; 
     genFace = genFace .* (1e-03);
     
