@@ -1,8 +1,3 @@
-landmarks = loadLandmarks;
-sizePC = size(model.shapePC, 2);
-
-numOfParams  = 25;
-numLandmarks = 35;
 
 zPos = repelem(focalLengthWorldUnits,size(projectedImage,1)).';
 

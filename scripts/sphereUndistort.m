@@ -1,6 +1,3 @@
-clc;
-clear all;
-
 originalImage = imread('ParkAngularMap-800.jpg');
 originalImage = im2double(originalImage);
 

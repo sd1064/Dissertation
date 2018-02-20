@@ -9,20 +9,19 @@
 clc;
 clear;
 
-model = load('01_MorphableModel.mat');
+% Load
+loader;
 
-% load('face.mat','shape');
-shp = coef2object( randn(199, 1), model.shapeMU, model.shapePC, model.shapeEV );
-shape = reshape(shp, [ 3 prod(size(shp))/3 ]); 
-
-sphereRadius = 53;
-
+% Processing
+% sphereUndistort; - Not ready to be included yet
 calculateParams;
 pointsTo2D;
 costUtiliser;
+
+% Display
 displayGennedVInput;
 displayCamera;
-sphereUndistort;
+
 
 
 
