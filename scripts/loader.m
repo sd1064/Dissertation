@@ -7,11 +7,15 @@ shape = reshape(shp, [ 3 prod(size(shp))/3 ]);
 verts = shape.';
 verts = verts .* (1e-03);
 
-landmarks = loadLandmarks;
+% Discard lanmdark 61 and 65 so landmarks for BFM and face detector match 
+landmarkpath = 'Landmarks68_BFM.anl';
+idx = readLandmarks(landmarkpath);
+idx = [ idx(1:60,1) ;  idx(62:64,1) ; idx(66:end,1)];
+
 sizePC = size(model.shapePC, 2);
 
 % Load Image Stuff
-originalImage = imread('testSphere.jpg');
+originalImage = imread('ball2.jpg');
 originalImage = im2double(originalImage);
 
 % Set params
@@ -24,4 +28,4 @@ centreProjectionX = 0;
 centreProjectionY = 0;
 
 numOfParams  = 25;
-numLandmarks = 35;
+numLandmarks = 66;

@@ -1,5 +1,8 @@
 % FacePoint into a sphere reflection point that is then projected
 
+
+% Eventually these will be landmarks from sphere Undistort
+
 % Translate
 verts(:,1)= verts(:,1)+0;
 verts(:,2)= verts(:,2)+0;
@@ -16,4 +19,3 @@ end
 
 projectedImage  = perspectiveProjection(sphereReflections,focalLengthWorldUnits,centreProjectionX,centreProjectionY);
 projectedSphere = perspectiveProjection(fvc.vertices,focalLengthWorldUnits,centreProjectionX,centreProjectionY);
-% projectedImage = perspectiveProjection(verts,focalLengthWorldUnits,centreProjectionX,centreProjectionY);

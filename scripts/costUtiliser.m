@@ -1,10 +1,12 @@
 
 zPos = repelem(focalLengthWorldUnits,size(projectedImage,1)).';
 
-landmarksAverage = landmarks(:,2:end);
-landmarkVertNum  = landmarks(:,1) +1;
-landmarksProjectedImage = getLandmarks([projectedImage zPos],landmarkVertNum);
+% At the moment always use all landmarks 
+% This could do with being smarter
+% Won't need this once landmarks are flowing through 
+landmarksProjectedImage = getLandmarks([projectedImage zPos],idx);
 landmarksProjectedImage = landmarksProjectedImage(1:numLandmarks,:);
+% 
 
 offsets = repelem(0,numOfParams).';
 Rx = 0; Ry = 0; Rz = 0; Tx = 0; Ty = 0; Tz = 500;
@@ -14,7 +16,7 @@ params = double([offsets; ...
 
 func = @(params)differenceFaces(params,spherePosition,sphereRadius, ...
         focalLengthWorldUnits,centreProjectionX,centreProjectionY, ...
-        model,landmarkVertNum,landmarksProjectedImage,numOfParams);
+        model,landmarksProjectedImage,numOfParams,idx);
 
 options = optimoptions('lsqnonlin','Display','iter');
     

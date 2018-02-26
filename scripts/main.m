@@ -9,16 +9,13 @@
 clc;
 clear;
 
-% Load
 loader;
-
-% Processing
-% sphereUndistort; - Not ready to be included yet
 calculateParams;
+% sphereUndistort;
+
 pointsTo2D;
 costUtiliser;
 
-% Display
 displayGennedVInput;
 displayCamera;
 

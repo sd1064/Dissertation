@@ -1,6 +1,6 @@
 function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadius, ...
                           focalLengthWorldUnits,centreProjectionX,centreProjectionY, ...
-                          model,landmarkVertNum,projectedFace,numOfParams)
+                          model,projectedFace,numOfParams,idx)
 
     % projectedFace is the known Face
     % AvgFace is the face that will be used to fit to the known face
@@ -29,8 +29,12 @@ function [outputVector] = differenceFaces(inputVector,spherePosition,sphereRadiu
     genFace(:,2) = genFace(:,2) + Ty;
     genFace(:,3) = genFace(:,3) + Tz;
     
-    landMarksGenned = getLandmarks(genFace,landmarkVertNum);
+    landMarksGenned = getLandmarks(genFace,idx);
+    
+    % At the moment always use all landmarks 
+    % This could do with being smarter
     landMarksGenned = landMarksGenned(1:size(projectedFace,1),:);
+    
     sphereReflections = zeros(size(landMarksGenned));
     
     for i=1:length(landMarksGenned)  
