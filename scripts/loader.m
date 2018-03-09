@@ -15,7 +15,7 @@ idx = [ idx(1:60,1) ;  idx(62:64,1) ; idx(66:end,1)];
 sizePC = size(model.shapePC, 2);
 
 % Load Image Stuff
-originalImage = imread('ball2.jpg');
+originalImage = imread('testSphere.jpg');
 originalImage = im2double(originalImage);
 
 % Set params
