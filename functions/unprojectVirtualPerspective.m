@@ -1,39 +1,40 @@
-function [ points ] = unprojectVirtualPerspective(image,landmarks,rotations,radius)
-
-    % INTERPOLATE POINTS
-    % go from ab -> xyz
-    
-    v = repelem(0.1,size(landmarks,5));
-    interpolent = scatteredInterpolant(landmarks(:,1),landmarks(:,2),v.');
-    
-    % UNIT SPHERE !!!!
-    % WANT Z = 1 
-    
-    [x,y,z] = sphere(radius); 
-    interpolatedLandmarks = interpolent(x,y,z);
+function [ points ] = unprojectVirtualPerspective(landmarks,rotations,image,hfov,vfov )
     
     points = [];
-    for idx = 1:numel(interpolatedLandmarks)
-        xyz = interpolatedLandmarks(idx);
+    for idx = 1:numel(landmarks)
         
-        xyz = xyz/0.1 * xyz(3);
+        ab = landmarks(idx);
         
-        % undo the rotation
+        hv = convert(ab,hfov,vfov,image);
+        hv = [hv.' ; 0.1];
+        xyz = hv/norm(hv);
+        
         xyz = rotz(rotations(1,3)) * roty(rotations(1,2)).' * rotx(rotations(1,1)).' * xyz;
-
-        % get back theta and phi
+        
         theta = acos(xyz(3));
-        phi = asin(xyz(2)/sin(theta));
-
-        % get back to u and v
-        u = radius * cos(theta);
-        v = radius * sin(theta);
-
-        % from u and v back to original image coordinages
-        % ATM just plot onto cropped image
-        % REMEBER LANDMARKS ARE X Y AND MATLAB IS ROWS AND COLUMNS
+        phi = atan2(xyz(2),xyz(1));
+        
+        u = phi * cos(theta);
+        v = phi * sin(theta);
+        
         points = [points; u v];
     end
     
 end
 
+
+function [converted] = convert(ab,hfov,vfov,image) 
+    % go from a b to h v coord space
+    % e.g -xmax to xmax and -ymax to ymax
+    
+    h = deg2rad(hfov);
+    v = deg2rad(vfov);
+    ratio = v/h;
+    
+    xmax = 0.1 * tan (h/2);
+    ymax = 0.1 * tan (v/2);
+
+    % cols = linspace(-xmax,xmax,generatedImageWidth);
+    % rows = linspace(-ymax,ymax,generatedImageWidth*ratio);
+    
+end
