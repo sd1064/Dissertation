@@ -21,6 +21,7 @@ function [ image ] = generateVirtualPerspectiveProjection( image,sphereRadius,rx
               % Calculate theta,phi
               phi = atan2(v,u);
               theta = pi*sqrt((u)^2 + (v)^2);
+              
               xyz = [sin(theta)*cos(phi); sin(theta)*sin(phi); cos(theta)];
               xyz = rotx(rx) * roty(ry) * rotz(rz) * xyz;
               if xyz(3)>0
