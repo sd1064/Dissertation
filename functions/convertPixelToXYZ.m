@@ -15,11 +15,16 @@ function [xyz] = convertPixelToXYZ(ab,hfov,vfov,sizeX,sizeY)
     ymax = 0.1 * tan (v/2);
     
     % Respect to xmax ymax
+    stepSizeX = (xmax*2)/(sizeX-1);
+    stepSizeY = (ymax*2)/(sizeY-1);
     
-    idxX = -xmax:((xmax*2)/(sizeX-1)):xmax;
-    idxY = -ymax:((ymax*2)/(sizeY-1)):ymax;   
+    idxX = -xmax:stepSizeX:xmax;
+    idxY = -ymax:stepSizeY:ymax;   
+    
+    % Some form of conversion ?
     
     vals = [idxX(ab(1)) idxY(ab(2))];
+    vals2 = [((2*xmax)/sizeX)*ab(1) - xmax ,((2*ymax)/sizeY)*ab(2) - ymax ] ;
     
-    % xyz = [ xRespectToXFov yRespectToYFov  0.1 ];
+    xyz = [ vals2  0.1 ];
 end

@@ -3,9 +3,9 @@ function [ points ] = unprojectVirtualPerspective(landmarks,rotations,image,hfov
     points = [];
     for idx = 1:size(landmarks,1)
         
-        xyz = convertPixelToXYZ(landmarks(idx,:),hfov,vfov,image);
+        xyz = convertPixelToXYZ(landmarks(idx,:),hfov,vfov,size(image,2),size(image,1));
+        xyz = xyz.';
         xyz = xyz/norm(xyz);
-
         xyz = rotz(rotations(1,3)).' * roty(rotations(1,2)).' * rotx(rotations(1,1)).' * xyz;
         
         theta = acos(xyz(3));
@@ -17,7 +17,7 @@ function [ points ] = unprojectVirtualPerspective(landmarks,rotations,image,hfov
         point1 = (u+1)*radius; 
         point2 = (v+1)*radius;
         
-        points = [points; point1 point2];
+        points = [points; round(point1) round(point2)];
     end
     
 end

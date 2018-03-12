@@ -10,7 +10,7 @@ verts = verts .* (1e-03);
 % Discard lanmdark 61 and 65 so landmarks for BFM and face detector match 
 landmarkpath = 'Landmarks68_BFM.anl';
 idx = readLandmarks(landmarkpath);
-idx = [ idx(1:60,1) ;  idx(62:64,1) ; idx(66:end,1)];
+idx  = [idx(18:end)];
 
 sizePC = size(model.shapePC, 2);
 
@@ -28,4 +28,8 @@ centreProjectionX = 0;
 centreProjectionY = 0;
 
 numOfParams  = 25;
-numLandmarks = 66;
+numLandmarks = 49;
+
+hFov = 116;
+vFov = 83;
+vppImageWidth = 400;
