@@ -11,13 +11,13 @@ clear;
 
 loader;
 calculateParams;
-% sphereUndistort;
+sphereUndistort;
 
-pointsTo2D;
-costUtiliser;
-
-displayGennedVInput;
-displayCamera;
+% pointsTo2D;
+% costUtiliser;
+% 
+% displayGennedVInput;
+% displayCamera;
 
 
 

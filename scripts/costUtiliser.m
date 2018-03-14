@@ -1,23 +1,31 @@
-
 zPos = repelem(focalLengthWorldUnits,size(projectedImage,1)).';
 
 % At the moment always use all landmarks 
 % This could do with being smarter
 % Won't need this once landmarks are flowing through 
-landmarksProjectedImage = getLandmarks([projectedImage zPos],idx);
-landmarksProjectedImage = landmarksProjectedImage(1:numLandmarks,:);
-% 
+% landmarksProjectedImage = getLandmarks([projectedImage zPos],idx);
+% landmarksProjectedImage = landmarksProjectedImage(1:numLandmarks,:);
 
 offsets = repelem(0,numOfParams).';
-Rx = 0; Ry = 0; Rz = 0; Tx = 0; Ty = 0; Tz = 500;
+Rx = 0; Ry = 0; Rz = 0; Tx = 0; Ty = 0; Tz = 0;
+params = double([offsets; Rx; Ry; Rz; Tx; Ty; Tz; ]);
 
-params = double([offsets; ...
-    Rx; Ry; Rz; Tx; Ty; Tz; ]);
-
-func = @(params)differenceFaces(params,spherePosition,sphereRadius, ...
+% ---------------------------------------------------------------------
+% SPHERE ONE 
+funcOne = @(params)differenceFaces(paramsOne,spherePositionOne,sphereRadius, ...
         focalLengthWorldUnits,centreProjectionX,centreProjectionY, ...
-        model,landmarksProjectedImage,numOfParams,idx);
-
+        model,projectedImageLandmarksSphereOne,numOfParams,idx);
 options = optimoptions('lsqnonlin','Display','iter');
-    
-[ret,resnorm,residual,exitflag,output] = lsqnonlin(func,params,[],[],options);
+
+[retOne,resnorm,residual,exitflag,output] = lsqnonlin(funcOne,paramsOne,[],[],options);
+% ---------------------------------------------------------------------
+
+% SPHERE Two 
+funcTwo = @(params)differenceFaces(paramsTwo,spherePositionTwo,sphereRadius, ...
+        focalLengthWorldUnits,centreProjectionX,centreProjectionY, ...
+        model,projectedImageLandmarksSphereTwo,numOfParams,idx);
+options = optimoptions('lsqnonlin','Display','iter');
+
+[retTwo,resnorm,residual,exitflag,output] = lsqnonlin(funcTwo,paramsTwo,[],[],options);
+% ---------------------------------------------------------------------
+

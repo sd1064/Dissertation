@@ -1,11 +1,16 @@
-% Can delete once got actual data 
-originalImage  = imread('me.jpg');
-originalImage = im2double(originalImage);
+sphereOneRounded = [round(sphereOne(1)) round(sphereOne(2)) round(sphereOne(3))];
+sphereTwoRounded = [round(sphereTwo(1)) round(sphereTwo(2)) round(sphereTwo(3))];
 
-[centres,radii] = circleRecognition(originalImage,400,450);
+% Sphere One
+croppedImageSphereOne = imcrop(originalImage,[sphereOneRounded(1)-sphereOneRounded(3) sphereOneRounded(2)-sphereOneRounded(3) sphereOneRounded(3)*2 sphereOneRounded(3)*2]);
+[imageSphereOne,landmarksSphereOne,rotationSphereOne] = bestVirtualPerspectiveProjection(croppedImageSphereOne,sphereOneRounded(3),hFov,vFov,400);
+points2DSphereOne = unprojectVirtualPerspective(landmarksSphereOne,rotationSphereOne,imageSphereOne,hFov,vFov,sphereOneRounded(3));
 
-spherePanoramic = [round(sphereOne(1)) round(sphereOne(2)) round(sphereOne(3))];
-croppedImage = imcrop(originalImage,[spherePanoramic(1)-spherePanoramic(3) spherePanoramic(2)-spherePanoramic(3) spherePanoramic(3)*2 spherePanoramic(3)*2]);
+% Sphere Two
+croppedImageSphereTwo = imcrop(originalImage,[sphereTwoRounded(1)-sphereTwoRounded(3) sphereTwoRounded(2)-sphereTwoRounded(3) sphereTwoRounded(3)*2 sphereTwoRounded(3)*2]);
+[imageSphereTwo,landmarksSphereTwo,rotationSphereTwo] = bestVirtualPerspectiveProjection(croppedImageSphereTwo,sphereTwoRounded(3),hFov,vFov,400);
+points2DSphereTwo = unprojectVirtualPerspective(landmarksSphereTwo,rotationSphereTwo,imageSphereTwo,hFov,vFov,sphereTwoRounded(3));
 
-[image,landmarks,rotation] = bestVirtualPerspectiveProjection(croppedImage,spherePanoramic(3),hFov,vFov,vppImageWidth);
-points = unprojectVirtualPerspective(landmarks,rotation,image,hFov,vFov,spherePanoramic(3));
+% Convert back to regular image coordinates
+points2DSphereOneOriginal = convertToOriginal([sphereOneRounded(1)-sphereOneRounded(3) sphereOneRounded(2)-sphereOneRounded(3)],points2DSphereOne);
+points2DSphereTwoOriginal = convertToOriginal([sphereTwoRounded(1)-sphereTwoRounded(3) sphereTwoRounded(2)-sphereTwoRounded(3)],points2DSphereTwo);

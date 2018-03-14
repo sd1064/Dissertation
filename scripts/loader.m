@@ -15,7 +15,7 @@ idx  = [idx(18:end)];
 sizePC = size(model.shapePC, 2);
 
 % Load Image Stuff
-originalImage = imread('testSphere.jpg');
+originalImage = imread('me.jpg');
 originalImage = im2double(originalImage);
 
 % Set params
@@ -30,6 +30,6 @@ centreProjectionY = 0;
 numOfParams  = 25;
 numLandmarks = 49;
 
-hFov = 116;
-vFov = 83;
+hFov = 192;
+vFov = 116;
 vppImageWidth = 400;
