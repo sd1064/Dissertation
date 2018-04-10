@@ -9,11 +9,12 @@ function [ returnVal ] = extrinsicSphereCalibration(K,sphere,worldRadius)
     
     u0 = K(1,3);
     v0 = K(2,3);
+    
     us = sphere(1,1);
     vs = sphere(1,2);
     
-    Rs=worldRadius;
-    
+    Rs = worldRadius;
+     
     fx = K(1,1);
     fy = K(2,2);
     

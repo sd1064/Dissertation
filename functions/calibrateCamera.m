@@ -5,7 +5,7 @@ function [ cameraParams ] = calibrateCamera( numberImages,squareSize)
     numImages = numberImages;
     imageFileNames = cell(1, numImages);
     for i = 1:numImages
-        imageFileNames{i} = fullfile(pwd,'res','images','calibration','test',sprintf('test (%d).jpg', i));
+        imageFileNames{i} = fullfile(pwd,'res','images','calib',sprintf('calib (%d).jpg', i));
     end
 
     % Detect checkerboards in images
@@ -28,13 +28,13 @@ function [ cameraParams ] = calibrateCamera( numberImages,squareSize)
         'ImageSize', [mrows, ncols]);
 
     % View reprojection errors
-    %h1=figure; showReprojectionErrors(cameraParams);
+    h1=figure; showReprojectionErrors(cameraParams);
 
     % Visualize pattern locations
     h2=figure; showExtrinsics(cameraParams, 'CameraCentric');
 
     % Display parameter estimation errors
-    %displayErrors(estimationErrors, cameraParams);
+    displayErrors(estimationErrors, cameraParams);
 
     % For example, you can use the calibration data to remove effects of lens distortion.
     %undistortedImage = undistortImage(originalImage, cameraParams);

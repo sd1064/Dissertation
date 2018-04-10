@@ -1,9 +1,10 @@
-function [centres,radii] = circleRecognition(inputImage,circleBoundaryLow,circleBoundaryHigh)
+function [centers,radii] = circleRecognition(inputImage,circleBoundaryLow,circleBoundaryHigh)
+    
+    I = imguidedfilter(inputImage);
+    I = imguidedfilter(I);
+    figure; imshow(I);    
 
-    BW = rgb2gray(inputImage);
-    BW = imgaussfilt(BW, 5);
-
-    centres = []; radii = [];
-    [centres, radii] = imfindcircles(BW,[circleBoundaryLow circleBoundaryHigh],'ObjectPolarity','dark','Sensitivity',0.95,'EdgeThreshold',0.2,'Method','twostage');
+    [centers, radii, metric] = imfindcircles(I,[circleBoundaryLow circleBoundaryHigh],'ObjectPolarity','bright','Sensitivity',0.99,'EdgeThreshold',0.13,'Method','twostage');
+    viscircles(centers, radii);
 
 end
