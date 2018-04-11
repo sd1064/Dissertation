@@ -1,6 +1,5 @@
 function [outputVector] = differenceFacesTranslationRotation(inputVector,spherePositionOne,spherePositionTwo,sphereRadius, ...
-                          focalLengthWorldUnits,centreProjectionX,centreProjectionY, ...
-                          model,projectedFaceOne,projectedFaceTwo,numOfParams,idx)
+                          k,model,projectedFaceOne,projectedFaceTwo,numOfParams,idx)
 
     % projectedFace is the known Face
     % AvgFace is the face that will be used to fit to the known face
@@ -30,16 +29,14 @@ function [outputVector] = differenceFacesTranslationRotation(inputVector,sphereP
     for i=1:length(landMarksGenned)  
         sphereReflectionsOne(i,:) = sphereReflection(sphereRadius,spherePositionOne,landMarksGenned(i,:));
     end
-    projectedGenOne  = perspectiveProjection(sphereReflectionsOne,focalLengthWorldUnits,centreProjectionX,centreProjectionY);
-    projectedGenOne = [projectedGenOne repelem(focalLengthWorldUnits,size(projectedGenOne,1)).'];
+    projectedGenOne  = perspectiveProjection(sphereReflectionsOne,k);
     
     % Projections for second sphere
     sphereReflectionsTwo = zeros(size(landMarksGenned));
     for i=1:length(landMarksGenned)  
         sphereReflectionsTwo(i,:) = sphereReflection(sphereRadius,spherePositionTwo,landMarksGenned(i,:));
     end
-    projectedGenTwo  = perspectiveProjection(sphereReflectionsTwo,focalLengthWorldUnits,centreProjectionX,centreProjectionY);
-    projectedGenTwo = [projectedGenTwo repelem(focalLengthWorldUnits,size(projectedGenTwo,1)).'];
+    projectedGenTwo  = perspectiveProjection(sphereReflectionsTwo,k);
 
     outputVector = [];
     for i=1:length(projectedGenOne)

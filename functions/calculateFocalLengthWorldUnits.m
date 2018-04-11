@@ -1,9 +1,5 @@
-function [ FocalLength ] = calculateFocalLengthWorldUnits( worldRadius,pixelRadius,fx )
-%   calculate FocalLength F
-%   F = fx * px
-%   px = worldRadius/pixelRadius
-
-    FocalLength = fx * px (worldRadius/pixelRadius);
-    
+function [ FocalLength ] = calculateFocalLengthWorldUnits(world,pixel,fx )
+    px = world/pixel;
+    FocalLength = fx*px;
 end
 

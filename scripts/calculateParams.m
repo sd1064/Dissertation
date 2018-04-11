@@ -10,5 +10,3 @@ sphereTwoXY = [sphereTwo(1) size(undistortedImage,1)-sphereOne(2) sphereTwo(3)];
 
 spherePositionOne = extrinsicSphereCalibration(cameraParams.IntrinsicMatrix,sphereOneXY,sphereRadius);
 spherePositionTwo = extrinsicSphereCalibration(cameraParams.IntrinsicMatrix,sphereTwoXY,sphereRadius);
-
-focalLengthWorldUnits = calculateFocalLengthWorldUnits(sphereRadius,sphereOne(1,3),cameraParams.FocalLength(1));

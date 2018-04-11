@@ -1,13 +1,11 @@
-finalFace = retTwo;
-shpG = coef2object( finalFace(1:25), model.shapeMU, model.shapePC, model.shapeEV );
-
-%AvgFace
+inputVector = retOne;
+shpG = coef2object( zeros(25,1), model.shapeMU, model.shapePC, model.shapeEV );
 genFace = reshape(shpG, [ 3 prod(size(shpG))/3 ])'; 
 genFace = genFace .* (1e-03);
-genFace = genFace * rotx(finalFace(26)) * roty(finalFace(27)) * rotz(finalFace(28));
-genFace(:,1) = genFace(:,1) + finalFace(29);
-genFace(:,2) = genFace(:,2) + finalFace(30);
-genFace(:,3) = genFace(:,3) + finalFace(31);
+genFace = genFace * rotx(inputVector(1)) * roty(inputVector(2)) * rotz(inputVector(3));
+genFace(:,1) = genFace(:,1) + inputVector(4);
+genFace(:,2) = genFace(:,2) + inputVector(5);
+genFace(:,3) = genFace(:,3) + inputVector(6);
 
 figure;hold on;axis equal;grid on;
 [x,y,z] = sphere; 

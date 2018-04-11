@@ -15,7 +15,6 @@ points2DSphereTwoOriginal = convertToOriginal([sphereTwoRounded(1)-sphereTwoRoun
 figure;imshow(imageSphereOne);axis equal;hold on;scatter(landmarksSphereOne(:,1),landmarksSphereOne(:,2));
 figure;imshow(croppedImageSphereOne);axis equal;hold on;scatter(points2DSphereOne(:,1),points2DSphereOne(:,2));
 
-
 figure;imshow(imageSphereTwo);axis equal;hold on;scatter(landmarksSphereTwo(:,1),landmarksSphereTwo(:,2));
 figure;imshow(croppedImageSphereTwo);axis equal;hold on;scatter(points2DSphereTwo(:,1),points2DSphereTwo(:,2));
 
