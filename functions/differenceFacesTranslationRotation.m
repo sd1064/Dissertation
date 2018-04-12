@@ -16,7 +16,8 @@ function [outputVector] = differenceFacesTranslationRotation(inputVector,sphereP
     shape  = coef2object( offsets, shapeMu, shapePc, shapeEv );
     genFace = reshape(shape, [ 3 prod(size(shape))/3 ])'; 
     genFace = genFace .* (1e-03);
-    genFace=genFace * rotx(Rx) * roty(Ry) * rotz(Rz);
+    genFace = genFace * roty(180);
+    genFace = genFace * rotx(Rx) * roty(Ry) * rotz(Rz);
     genFace(:,1) = genFace(:,1) + Tx;
     genFace(:,2) = genFace(:,2) + Ty;
     genFace(:,3) = genFace(:,3) + Tz;
@@ -37,15 +38,8 @@ function [outputVector] = differenceFacesTranslationRotation(inputVector,sphereP
         sphereReflectionsTwo(i,:) = sphereReflection(sphereRadius,spherePositionTwo,landMarksGenned(i,:));
     end
     projectedGenTwo  = perspectiveProjection(sphereReflectionsTwo,k);
-
-    outputVector = [];
-    for i=1:length(projectedGenOne)
-        outputVector = [outputVector; norm(projectedFaceOne(i,:) - projectedGenOne(i,:))];
-    end
     
-    for i=1:length(projectedGenTwo)
-        outputVector = [outputVector; norm(projectedFaceTwo(i,:) - projectedGenTwo(i,:))];
-    end
+    outputVector = [projectedFaceOne(:)-projectedGenOne(:) ;projectedFaceTwo(:)-projectedGenTwo(:)];
     
 end
 

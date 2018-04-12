@@ -10,12 +10,14 @@ genFace(:,3) = genFace(:,3) + retTwo(31);
 oglp.width  = size(undistortedImage,2);
 oglp.height = size(undistortedImage,1);
 
-FV.verts = genFace;
-FV.faces = model.tl;
-FV.vertColours = getVertexColours(FV,k,spherePositionOne,oglp,sphereRadius,undistortedImage);
+FV.Vertices  = genFace;
+FV.Faces  = model.tl;
+FV.FaceVertexCData  = getVertexColours(FV,k,spherePositionOne,oglp,sphereRadius,undistortedImage);
+FV.edgeColor = 'none'
+figure; patch(FV,'FaceColor','interp');
 
-rp.height = 1000;
-rp.width  = 1000;
-rp.phi    = deg2rad(90);
-
-display_face (FV.verts, FV.vertColours(:), FV.faces, rp);
+FV.Vertices  = genFace;
+FV.Faces  = model.tl;
+FV.FaceVertexCData  = getVertexColours(FV,k,spherePositionTwo,oglp,sphereRadius,undistortedImage);
+FV.edgeColor = 'none'
+figure; patch(FV,'FaceColor','interp');

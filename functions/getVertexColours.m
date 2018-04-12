@@ -1,32 +1,26 @@
-function vertexColours = getVertexColours(FV,k,spherePos1,oglp,sphereRadius,image)
+function vertexColours = getVertexColours(FV,k,spherePosition,oglp,sphereRadius,image)
 
 % Get the rendering parameters
 width           = oglp.width;               % width of the image plane
 height          = oglp.height;              % height of the image plane
 
 % Get the vertices
-V           = FV.verts;
-Nvertices   = size(FV.verts, 1);
+V           = FV.Vertices;
+Nvertices   = size(FV.Vertices, 1);
 
-V2 = zeros(size(V));
-for i=1:length(V)  
-    V2(i,:) = sphereReflection(sphereRadius,spherePos1,V(i,:));
+Z = V(:, 3);
+
+sphereReflections = zeros(size(V));
+for i=1:length(sphereReflections)  
+    sphereReflections(i,:) = sphereReflection(sphereRadius,spherePosition,V(i,:));
 end
-% Store the vertex depths for z-buffering
-Z = V2(:, 3);
-
-% Compute the projected vertices in the image plane
-UV = perspectiveProjection(V2,k);
-
-% Transform to the pixel plane (the axes remain switched)
-UV(:, 1)    = width - UV(:, 1);
-UV          = UV + 0.5;
+UV  = perspectiveProjection(sphereReflections,k);
 
 % Get the triangle vertices
-v1      = FV.faces(:, 1);
-v2      = FV.faces(:, 2);
-v3      = FV.faces(:, 3);
-Nfaces  = size(FV.faces, 1);
+v1      = FV.Faces(:, 1);
+v2      = FV.Faces(:, 2);
+v3      = FV.Faces(:, 3);
+Nfaces  = size(FV.Faces, 1);
 
 % Compute bounding boxes for the projected triangles
 x       = [UV(v1, 1), UV(v2, 1), UV(v3, 1)];
@@ -125,19 +119,12 @@ clear Z zbuffer px py pz minx maxx miny maxy
 test    = fbuffer ~= 0;
 f       = unique(fbuffer(test));
 v       = unique([v1(f); v2(f); v3(f)]);
-f       = find(any(ismember(FV.faces, v), 2));
-Nfaces  = length(f);
+% f       = find(any(ismember(FV.faces, v), 2));
+% Nfaces  = length(f);
 
 % v are visible verts
-vertexColours = zeros(size(FV.verts));
-for i=1:length(vertexColours)
-    idxv = find(v(:,1)==i);
-    if idxv ~= 0
-        colourIdx = UV(i,:);
-        vertexColours(i,1) = image(round(colourIdx(1)),round(colourIdx(2)),1);
-        vertexColours(i,1) = image(round(colourIdx(1)),round(colourIdx(2)),2);
-        vertexColours(i,3) = image(round(colourIdx(1)),round(colourIdx(2)),3);
-    else
-        vertexColours(i,:) = [ 0 0 0];
-    end
+vertexColours = zeros(size(FV.Vertices));
+for c=1:3
+    vertexColours(:,c) = interp2(image(:,:,c),UV(:,1),UV(:,2));
 end
+% vertexColours = (setdiff(1:Nverts,v),c)=NaN);

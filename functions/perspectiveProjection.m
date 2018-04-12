@@ -1,16 +1,13 @@
 function [projected] = perspectiveProjection(verts,k)
 %PERSPECTIVEPROJECTION Summary of this function goes here
 %   Input 3D mesh - output the projected points
-    % Good explanation :
-    % https://www.reddit.com/r/compsci/comments/37xqok/can_someone_explain_part_of_perspective/
-    
-    fx = k(1,1);
-    fy = k(1,1);
-    cx = k(3,1);
-    cy = k(3,2);
-    
-    projected = [verts(:,1) verts(:,2) ];
-    projected(:,1) = projected(:,1).*fx./verts(:,3)  + cx;
-    projected(:,2) = projected(:,2).*-fy./verts(:,3) + cy;
+
+    if size(verts,2)==3
+    	verts = verts';
+    end
+    verts(4,:)=1;
+    uvw = k*[eye(3) [0;0;0];]*verts;
+    projected(:,1) = (uvw(1,:)./uvw(3,:))';
+    projected(:,2) = (uvw(2,:)./uvw(3,:))';
     
 end

@@ -5,6 +5,7 @@ shpG = coef2object( finalFace(1:25), model.shapeMU, model.shapePC, model.shapeEV
 genFace = reshape(shpG, [ 3 prod(size(shpG))/3 ])'; 
 genFace = genFace .* (1e-03);
 genFace = genFace * rotx(finalFace(26)) * roty(finalFace(27)) * rotz(finalFace(28));
+genFace = genFace * roty(180);
 genFace(:,1) = genFace(:,1) + finalFace(29);
 genFace(:,2) = genFace(:,2) + finalFace(30);
 genFace(:,3) = genFace(:,3) + finalFace(31);
@@ -39,7 +40,7 @@ for i=1:length(genFace)
 end
 projectedGenTwo  = perspectiveProjection(sphereReflectionsTwo,k);
 
-figure;hold on;axis equal;grid on;
+figure;imshow(undistortedImage);hold on;axis equal;grid on;
 scatter3(projectedGenOne(:,1),projectedGenOne(:,2),zeros(size(projectedGenOne,1),1),10,[1,0,0]);
 scatter3(projectedGenTwo(:,1),projectedGenTwo(:,2),zeros(size(projectedGenOne,1),1),10,[0,1,0]);
 scatter3(projectedGenTwo(:,1),projectedGenTwo(:,2),zeros(size(projectedGenOne,1),1),10,[0,1,0]);

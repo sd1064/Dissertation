@@ -2,6 +2,7 @@ inputVector = retOne;
 shpG = coef2object( zeros(25,1), model.shapeMU, model.shapePC, model.shapeEV );
 genFace = reshape(shpG, [ 3 prod(size(shpG))/3 ])'; 
 genFace = genFace .* (1e-03);
+genFace = genFace * roty(180);
 genFace = genFace * rotx(inputVector(1)) * roty(inputVector(2)) * rotz(inputVector(3));
 genFace(:,1) = genFace(:,1) + inputVector(4);
 genFace(:,2) = genFace(:,2) + inputVector(5);
