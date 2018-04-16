@@ -11,27 +11,29 @@ function [outputVector] = differenceFacesTranslationRotation(inputVector,sphereP
     
     Rx = inputVector(1); Ry = inputVector(2); Rz = inputVector(3);
     Tx = inputVector(4); Ty = inputVector(5); Tz = inputVector(6);
-
+    t = [Tx;Ty;Tz];
+    
     % Generate an aberage face and apply rotation translation
     shape  = coef2object( offsets, shapeMu, shapePc, shapeEv );
-    genFace = reshape(shape, [ 3 prod(size(shape))/3 ])'; 
-    genFace = genFace .* (1e-03);
-    genFace = genFace * roty(180);
-    genFace = genFace * rotx(Rx) * roty(Ry) * rotz(Rz);
-    genFace(:,1) = genFace(:,1) + Tx;
-    genFace(:,2) = genFace(:,2) + Ty;
-    genFace(:,3) = genFace(:,3) + Tz;
+    genFace = reshape(shape, [ 3 prod(size(shape))/3 ])';
+    genFace = [genFace(:,1) .* -1 genFace(:,2) genFace(:,3)];
+    genFace = genFace * (1e-03);
+    genFace = [rotz(180) * genFace']';
+    genFace = [t + genFace']';
+    genFace = [rotx(Rx) * genFace']';
+    genFace = [roty(Ry) * genFace']';
+    genFace = [rotz(Rz) * genFace']';
     
     % Get landmarks
     landMarksGenned = getLandmarks(genFace,idx);
-    
+
     % Projections for first sphere
     sphereReflectionsOne = zeros(size(landMarksGenned));
     for i=1:length(landMarksGenned)  
         sphereReflectionsOne(i,:) = sphereReflection(sphereRadius,spherePositionOne,landMarksGenned(i,:));
     end
     projectedGenOne  = perspectiveProjection(sphereReflectionsOne,k);
-    
+
     % Projections for second sphere
     sphereReflectionsTwo = zeros(size(landMarksGenned));
     for i=1:length(landMarksGenned)  

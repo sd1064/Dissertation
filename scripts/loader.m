@@ -5,17 +5,18 @@ model = load('01_MorphableModel.mat');
 idx = readLandmarks('Landmarks68_BFM.anl');
 idx = [idx(1:60,1); idx(62:64,1) ; idx(66:end,1)];
 idx = [idx(18:end)];
+
 sizePC = size(model.shapePC, 2);
 
 % Load Image Stuff
-originalImage = imread('spheres (17).JPG');
+originalImage = imread('spheres (16).JPG');
 originalImage = im2double(originalImage);
 
 % Set params
 sphereRadius = 12.5;
 numberImages = 13;
 squareSize   = 4;
-numOfParams  = 25;
+numOfParams  = 10;
 numLandmarks = 49;
 vFov = 145; 
 hFov = 145;

@@ -1,5 +1,6 @@
-% cameraParams = calibrateCamera(numberImages,squareSize);
-% [undistortedImage, newOrigin] = undistortImage(originalImage, cameraParams, 'OutputView', 'full');
+cameraParams = calibrateCamera(numberImages,squareSize);
+
+[undistortedImage, newOrigin] = undistortImage(originalImage, cameraParams, 'OutputView', 'full');
 [centres,radii] = circleRecognition(undistortedImage,330,380);
 
 sphereOne = [centres(1,1) centres(1,2) radii(1,1)];

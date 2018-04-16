@@ -1,14 +1,17 @@
-finalFace = retTwo;
-shpG = coef2object( finalFace(1:25), model.shapeMU, model.shapePC, model.shapeEV );
+close all;
 
-%AvgFace
-genFace = reshape(shpG, [ 3 prod(size(shpG))/3 ])'; 
-genFace = genFace .* (1e-03);
-genFace = genFace * rotx(finalFace(26)) * roty(finalFace(27)) * rotz(finalFace(28));
-genFace = genFace * roty(180);
-genFace(:,1) = genFace(:,1) + finalFace(29);
-genFace(:,2) = genFace(:,2) + finalFace(30);
-genFace(:,3) = genFace(:,3) + finalFace(31);
+finalFace = retTwo;
+shpG = coef2object( finalFace(1:numOfParams ), model.shapeMU, model.shapePC, model.shapeEV );
+
+genFace = reshape(shpG, [ 3 prod(size(shpG))/3 ])';
+genFace = [genFace(:,1) .* -1 genFace(:,2) genFace(:,3)];
+genFace = genFace * (1e-03);
+genFace = [rotz(180) * genFace']';
+t = [finalFace(numOfParams + 4);finalFace(numOfParams + 5);finalFace(numOfParams + 6)];
+genFace = [t + genFace']';
+genFace = [rotx(finalFace(numOfParams + 1)) * genFace']';
+genFace = [roty(finalFace(numOfParams + 2)) * genFace']';
+genFace = [rotz(finalFace(numOfParams + 3)) * genFace']';
 
 figure;hold on;axis equal;grid on;
 [x,y,z] = sphere; 
@@ -21,29 +24,48 @@ pcshow(genFace);
 xlabel('X (mm)');
 ylabel('Y (mm)');
 zlabel('Z (mm)');
-
 figure;hold on;axis equal;grid on;
 pcshow(genFace);
 
-
+landMarksGenned = genFace;
+% landMarksGenned = getLandmarks(genFace,idx);
 % Projections for first sphere
-sphereReflectionsOne = zeros(size(genFace));
-for i=1:length(genFace)  
-    sphereReflectionsOne(i,:) = sphereReflection(sphereRadius,spherePositionOne,genFace(i,:));
+sphereReflectionsOne = zeros(size(landMarksGenned));
+for i=1:length(landMarksGenned)  
+   sphereReflectionsOne(i,:) = sphereReflection(sphereRadius,spherePositionOne,landMarksGenned(i,:));
 end
 projectedGenOne  = perspectiveProjection(sphereReflectionsOne,k);
 
 % Projections for second sphere
-sphereReflectionsTwo = zeros(size(genFace));
-for i=1:length(genFace)  
-    sphereReflectionsTwo(i,:) = sphereReflection(sphereRadius,spherePositionTwo,genFace(i,:));
+sphereReflectionsTwo = zeros(size(landMarksGenned));
+for i=1:length(landMarksGenned)  
+    sphereReflectionsTwo(i,:) = sphereReflection(sphereRadius,spherePositionTwo,landMarksGenned(i,:));
 end
 projectedGenTwo  = perspectiveProjection(sphereReflectionsTwo,k);
 
 figure;imshow(undistortedImage);hold on;axis equal;grid on;
-scatter3(projectedGenOne(:,1),projectedGenOne(:,2),zeros(size(projectedGenOne,1),1),10,[1,0,0]);
-scatter3(projectedGenTwo(:,1),projectedGenTwo(:,2),zeros(size(projectedGenOne,1),1),10,[0,1,0]);
-scatter3(projectedGenTwo(:,1),projectedGenTwo(:,2),zeros(size(projectedGenOne,1),1),10,[0,1,0]);
-scatter3(projectedGenTwo(:,1),projectedGenTwo(:,2),zeros(size(projectedGenOne,1),1),10,[0,1,0]);
-scatter3(landmarksOne(:,1),landmarksOne(:,2),zeros(size(landmarksOne,1),1),10,[1,1,0]);
-scatter3(landmarksTwo(:,1),landmarksTwo(:,2),zeros(size(landmarksOne,1),1),10,[1,1,0]);
+scatter(projectedGenOne(:,1),projectedGenOne(:,2),10,[1,0,0]);
+scatter(points2DSphereOneOriginal(:,1),points2DSphereOneOriginal(:,2),10,[0,1,1]);
+scatter(projectedGenTwo(:,1),projectedGenTwo(:,2),10,[0,1,0]);
+scatter(points2DSphereTwoOriginal(:,1),points2DSphereTwoOriginal(:,2),10,[1,1,0]);
+
+oglp.height =size(undistortedImage,1);
+oglp.width = size(undistortedImage,2); 
+
+FV.Vertices  = genFace;
+FV.Faces  = model.tl;
+FV.edgeColor = 'none';
+
+vertexColour1  = getVertexColours(FV,k,spherePositionOne,oglp,sphereRadius,undistortedImage);
+vertexColour2  = getVertexColours(FV,k,spherePositionTwo,oglp,sphereRadius,undistortedImage);
+vertexColour = (vertexColour1 + vertexColour2)./2;
+
+b=vertexColour;
+zeroRows = all(b == 0, 2);
+b(zeroRows, :) = NaN;
+FV.FaceVertexCData = b;
+
+test = find(all(not(isnan(FV.FaceVertexCData)),2));
+genFaceNew = removerows(genFace,'ind',test);
+figure;hold on ; patch(FV,'FaceColor','interp');axis equal;pcshow(genFaceNew);
+

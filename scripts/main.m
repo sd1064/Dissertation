@@ -5,4 +5,4 @@ loader;
 calculateParams;
 sphereUndistort;
 costUtiliser;
-vertexColours;
+% vertexColours;

@@ -1,4 +1,4 @@
-function vertexColours = getVertexColours(FV,k,spherePosition,oglp,sphereRadius,image)
+function vertexColours = getVertexColours(FV,k,spherePositionOne,oglp,sphereRadius,image)
 
 % Get the rendering parameters
 width           = oglp.width;               % width of the image plane
@@ -7,12 +7,11 @@ height          = oglp.height;              % height of the image plane
 % Get the vertices
 V           = FV.Vertices;
 Nvertices   = size(FV.Vertices, 1);
-
 Z = V(:, 3);
 
 sphereReflections = zeros(size(V));
 for i=1:length(sphereReflections)  
-    sphereReflections(i,:) = sphereReflection(sphereRadius,spherePosition,V(i,:));
+    sphereReflections(i,:) = sphereReflection(sphereRadius,spherePositionOne,V(i,:));
 end
 UV  = perspectiveProjection(sphereReflections,k);
 
@@ -113,18 +112,18 @@ for i = 1: Nfaces
     
 end
 
-clear Z zbuffer px py pz minx maxx miny maxy
-
 % Get the vertices to render
 test    = fbuffer ~= 0;
 f       = unique(fbuffer(test));
-v       = unique([v1(f); v2(f); v3(f)]);
-% f       = find(any(ismember(FV.faces, v), 2));
-% Nfaces  = length(f);
+v  = unique([v1(f); v2(f); v3(f)]);
 
-% v are visible verts
 vertexColours = zeros(size(FV.Vertices));
 for c=1:3
     vertexColours(:,c) = interp2(image(:,:,c),UV(:,1),UV(:,2));
 end
-% vertexColours = (setdiff(1:Nverts,v),c)=NaN);
+empty = setdiff(1:Nvertices,v).';
+vertexColours(empty,:)=0;
+
+
+end
+
