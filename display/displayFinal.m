@@ -58,7 +58,19 @@ FV.edgeColor = 'none';
 
 vertexColour1  = getVertexColours(FV,k,spherePositionOne,oglp,sphereRadius,undistortedImage);
 vertexColour2  = getVertexColours(FV,k,spherePositionTwo,oglp,sphereRadius,undistortedImage);
-vertexColour = (vertexColour1 + vertexColour2)./2;
+
+vertexColour = zeros(size(vertexColour1));
+for i = 1:size(vertexColour,1)
+    if not(isequal(vertexColour1(i,:),[0,0,0])) && not(isequal(vertexColour2(i,:),[0,0,0]))
+        vertexColour(i,:) = (vertexColour1(i,:) + vertexColour2(i,:))/2;
+    elseif isequal(vertexColour1(i,:),[0,0,0]) && not(isequal(vertexColour2(i,:),[0,0,0]))
+        vertexColour(i,:) = vertexColour2(i,:);
+    elseif not(isequal(vertexColour1(i,:),[0,0,0])) && isequal(vertexColour2(i,:),[0,0,0])
+        vertexColour(i,:) = vertexColour1(i,:);
+    else
+        vertexColour(i,:) = [0,0,0];
+    end
+end
 
 b=vertexColour;
 zeroRows = all(b == 0, 2);
@@ -67,5 +79,5 @@ FV.FaceVertexCData = b;
 
 test = find(all(not(isnan(FV.FaceVertexCData)),2));
 genFaceNew = removerows(genFace,'ind',test);
-figure;hold on ; patch(FV,'FaceColor','interp');axis equal;pcshow(genFaceNew);
+figure;hold on ; x = patch(FV,'FaceColor','interp');axis equal;pcshow(genFaceNew);
 

@@ -1,4 +1,4 @@
-function [ imageRet,landmarks, rotation,uv ] = bestVirtualPerspectiveProjection( image,radius,hFov,vFoV,imageSize,zPlane)
+function [ imageRet,landmarks, rotation ] = bestVirtualPerspectiveProjection( image,radius,hFov,vFoV,imageSize,zPlane)
 
     found = 0;
     possibleRotations = [90:10:270].';
@@ -13,7 +13,7 @@ function [ imageRet,landmarks, rotation,uv ] = bestVirtualPerspectiveProjection(
     idx = 1;
     
     while found == 0
-        [intermediary ,uv ]= generateVirtualPerspectiveProjection(image,radius,possibleRotations(idx,1), ...
+        [intermediary ]= generateVirtualPerspectiveProjection(image,radius,possibleRotations(idx,1), ...
             possibleRotations(idx,2),possibleRotations(idx,3),hFov,vFoV,imageSize,zPlane);
         intermediary_filtered = intermediary;
         for layer=1:3
@@ -26,8 +26,6 @@ function [ imageRet,landmarks, rotation,uv ] = bestVirtualPerspectiveProjection(
             rotation = possibleRotations(idx,:);
             imageRet = intermediary_filtered;
         end
-        filename = strcat(mat2str(possibleRotations(idx, :)),'.png');
-        imwrite(intermediary_filtered,filename);
         idx = idx+1;
     end
 end

@@ -1,14 +1,5 @@
-function [ image,uv ] = generateVirtualPerspectiveProjection( image,sphereRadius,rx,ry,rz,hfov,vfov,generatedImageWidth,zPlane)
-%generateVirtualPerspectiveProjection 
-% generate a virtual perspecetive projection from thesis :
-
-% look at at page 88 for better explanation
-% basically set image plane arbitrally from a sphere and project points
-% onto it
-
+function [ image ] = generateVirtualPerspectiveProjection( image,sphereRadius,rx,ry,rz,hfov,vfov,generatedImageWidth,zPlane)
     pixelList = zeros((sphereRadius*2) * (sphereRadius*2),5);
-    uv = zeros((sphereRadius*2) * (sphereRadius*2),5);
-    
     i = 1;
     for row = (0:sphereRadius*2)
         for col = (0:sphereRadius*2)
@@ -33,22 +24,14 @@ function [ image,uv ] = generateVirtualPerspectiveProjection( image,sphereRadius
                     xyz = xyz/xyz(3)*zPlane;
                     pixelList(i,1) = xyz(1);
                     pixelList(i,2) = xyz(2);
-                    pixelList(i,3) = xyz(3);
                     pixelList(i,4) = image(rowN,col,1);
                     pixelList(i,5) = image(rowN,col,2);
                     pixelList(i,6) = image(rowN,col,3);                   
                 end
-                uv(i,1) = u;
-                uv(i,2) = v;
-                uv(i,3) = image(rowN,col,1);
-                uv(i,4) = image(rowN,col,2);
-                uv(i,5) = image(rowN,col,3);
-
             end
             i = i+1;
         end
     end
-
     pixelList = pixelList(any(pixelList,2),:);
 
     redInterp   = scatteredInterpolant(pixelList(:,1),pixelList(:,2),pixelList(:,4));
@@ -58,20 +41,16 @@ function [ image,uv ] = generateVirtualPerspectiveProjection( image,sphereRadius
     h = deg2rad(hfov);
     v = deg2rad(vfov);
     ratio = v/h;
-    
     xmax = zPlane  * tan (h/2);
     ymax = zPlane  * tan (v/2);
 
     cols = linspace(-xmax,xmax,generatedImageWidth);
     rows = linspace(-ymax,ymax,generatedImageWidth*ratio);
-
     [C,R] = meshgrid(cols,rows);
 
     r   = redInterp(C,R);
     g   = greenInterp(C,R);
     b   = blueInterp(C,R);
-
     image = cat(3, r, g, b);
 
 end
-

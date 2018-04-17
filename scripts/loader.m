@@ -9,7 +9,7 @@ idx = [idx(18:end)];
 sizePC = size(model.shapePC, 2);
 
 % Load Image Stuff
-originalImage = imread('spheres (16).JPG');
+originalImage = imread('spheres (17).JPG');
 originalImage = im2double(originalImage);
 
 % Set params

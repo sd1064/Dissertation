@@ -2,7 +2,7 @@ sphereOneRounded = round(sphereOne);
 sphereTwoRounded = round(sphereTwo);
 
 croppedImageSphereOne = imcrop(undistortedImage,[sphereOneRounded(1)-sphereOneRounded(3) sphereOneRounded(2)-sphereOneRounded(3) sphereOneRounded(3)*2 sphereOneRounded(3)*2]);
-[imageSphereOne,landmarksSphereOne,rotationSphereOne,uv] = bestVirtualPerspectiveProjection(croppedImageSphereOne,sphereOneRounded(3),hFov,vFov,vppImageWidth,zPlane);
+[imageSphereOne,landmarksSphereOne,rotationSphereOne] = bestVirtualPerspectiveProjection(croppedImageSphereOne,sphereOneRounded(3),hFov,vFov,vppImageWidth,zPlane);
 points2DSphereOne = unprojectVirtualPerspective(landmarksSphereOne,rotationSphereOne,imageSphereOne,hFov,vFov,sphereOneRounded(3),zPlane,sphereOneRounded);
 points2DSphereOneOriginal = convertToOriginal([sphereOneRounded(1)-sphereOneRounded(3) sphereOneRounded(2)-sphereOneRounded(3)],points2DSphereOne);
 
